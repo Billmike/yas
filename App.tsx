@@ -13,12 +13,20 @@ import {
   Text,
 } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
+import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
+
+const client = new ApolloClient({
+  uri: 'https://rickandmortyapi.com/graphql/',
+  cache: new InMemoryCache(),
+});
 
 const App = () => {
   return (
-    <NavigationContainer>
-      <Text>H i</Text>
-    </NavigationContainer>
+    <ApolloProvider client={client}>
+      <NavigationContainer>
+        <Text>H i</Text>
+      </NavigationContainer>
+    </ApolloProvider>
   );
 };
 
