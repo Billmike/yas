@@ -9,9 +9,6 @@
  */
 import 'react-native-gesture-handler';
 import * as React from 'react';
-import {
-  Text,
-} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
