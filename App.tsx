@@ -22,11 +22,19 @@ const client = new ApolloClient({
     typePolicies: {
       Query: {
         fields: {
-          results: {
+          characters: {
             keyArgs: false,
-            merge(existing = [], incoming) {
-              console.log('exi', incoming)
-              return [...existing, ...incoming]
+            merge(existing = { results: [] }, incoming) {
+              // Handle pagination here
+              // Merge results of fetched data
+              let data = existing.results;
+              if (incoming.results) {
+                data = [
+                  ...existing.results,
+                  ...incoming.results,
+                ]
+              }
+              return { ...incoming, results: data };
             }
           }
         }

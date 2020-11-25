@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import { useQuery } from '@apollo/client';
 import Search from '../components/Search';
-import { GET_CHARACTERS, SEARCH_CHARACTERS } from '../queries/index';
+import { GET_CHARACTERS } from '../queries/index';
 
 interface ICharacterList extends INavigationProps { }
 
@@ -76,39 +76,18 @@ const CharacterList = ({ navigation }: ICharacterList) => {
     return null;
   };
 
-  const handleSearch = (searchValue: string) => {
-    console.log(searchValue)
-    return fetchMore({
-      query: searchValue === '' ? GET_CHARACTERS : SEARCH_CHARACTERS,
-      variables: {
-        name: searchValue,
-      },
-      // updateQuery: (previousResult, { fetchMoreResult }) => ({
-      //   ...previousResult,
-      //   characters: {
-      //     ...previousResult.characters,
-      //     results: previousResult.characters.results,
-      //   }
-      // })
-    })
-  };
-
   const handleFetchMore = () => {
     if (data?.characters.info.next) {
-      return fetchMore({
-        variables: {
-          page: 2,
-        },
-        updateQuery: (previousResult, { fetchMoreResult }) => ({
-          ...previousResult,
-          characters: {
-            ...previousResult.characters,
-            results: previousResult.characters.results,
-          }
-        })
-      })
+      if (fetchMore !== undefined) {
+        return fetchMore({
+          variables: {
+            page: data?.characters?.info.next,
+            name: '',
+          },
+        });
+      }
     }
-  }
+  };
 
   return (
     <View style={styles.container}>
