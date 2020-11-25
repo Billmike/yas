@@ -17,7 +17,7 @@ import CharacterList from './app/screens/CharacterList';
 import CharacterDetails from './app/screens/CharacterDetails';
 
 const client = new ApolloClient({
-  uri: 'https://rickandmortyapi.com/graphql/',
+  uri: 'https://rickandmortyapi.com/graphql',
   cache: new InMemoryCache(),
 });
 
@@ -28,8 +28,19 @@ const App = () => {
     <ApolloProvider client={client}>
       <NavigationContainer>
         <Stack.Navigator initialRouteName="List">
-          <Stack.Screen name="List" component={CharacterList} />
-          <Stack.Screen name="Details" component={CharacterDetails} />
+          <Stack.Screen
+            name="List"
+            component={CharacterList}
+            options={{ headerTitle: 'Characters List' }}
+          />
+          <Stack.Screen
+            name="Details"
+            component={CharacterDetails}
+            options={{
+              headerBackTitle: 'C-List',
+              headerTitle: 'Character Details',
+            }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </ApolloProvider>

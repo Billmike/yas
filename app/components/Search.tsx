@@ -25,7 +25,7 @@ const Search = () => {
   return (
     <View style={styles.searchView}>
       <MaterialIcons name="search" size={25} />
-      <TextInput placeholder="What are you looking for?" style={styles.input} />
+      <TextInput placeholder="Find a character" style={styles.input} />
     </View>
   );
 };
