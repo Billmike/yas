@@ -18,7 +18,21 @@ import CharacterDetails from './app/screens/CharacterDetails';
 
 const client = new ApolloClient({
   uri: 'https://rickandmortyapi.com/graphql',
-  cache: new InMemoryCache(),
+  cache: new InMemoryCache({
+    typePolicies: {
+      Query: {
+        fields: {
+          results: {
+            keyArgs: false,
+            merge(existing = [], incoming) {
+              console.log('exi', incoming)
+              return [...existing, ...incoming]
+            }
+          }
+        }
+      }
+    }
+  }),
 });
 
 const Stack = createStackNavigator();

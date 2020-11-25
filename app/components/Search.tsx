@@ -1,8 +1,8 @@
 import React from 'react';
-import { View, StyleSheet, TextInput } from 'react-native';
+import { View, StyleSheet, TextInput, TextInputProps } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-interface ISearch { }
+interface ISearch extends TextInputProps { }
 
 const styles = StyleSheet.create({
   searchView: {
@@ -21,11 +21,11 @@ const styles = StyleSheet.create({
   },
 });
 
-const Search = () => {
+const Search = ({ onChangeText }: ISearch) => {
   return (
     <View style={styles.searchView}>
       <MaterialIcons name="search" size={25} />
-      <TextInput placeholder="Find a character" style={styles.input} />
+      <TextInput placeholder="Find a character" style={styles.input} onChangeText={onChangeText} />
     </View>
   );
 };
