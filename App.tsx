@@ -27,17 +27,14 @@ const client = new ApolloClient({
             merge(existing = { results: [] }, incoming) {
               let data = existing.results;
               if (incoming.results) {
-                data = [
-                  ...existing.results,
-                  ...incoming.results,
-                ]
+                data = [...existing.results, ...incoming.results];
               }
               return { ...incoming, results: data };
-            }
-          }
-        }
-      }
-    }
+            },
+          },
+        },
+      },
+    },
   }),
 });
 
