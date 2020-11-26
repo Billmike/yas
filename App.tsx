@@ -25,8 +25,6 @@ const client = new ApolloClient({
           characters: {
             keyArgs: false,
             merge(existing = { results: [] }, incoming) {
-              // Handle pagination here
-              // Merge results of fetched data
               let data = existing.results;
               if (incoming.results) {
                 data = [

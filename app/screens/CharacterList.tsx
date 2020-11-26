@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react';
 import {
   View,
@@ -9,9 +10,9 @@ import {
   Image,
   ActivityIndicator,
 } from 'react-native';
-import { useQuery } from '@apollo/client';
+import { useQuery, useLazyQuery } from '@apollo/client';
 import Search from '../components/Search';
-import { GET_CHARACTERS } from '../queries/index';
+import { GET_CHARACTERS, SEARCH_CHARACTERS } from '../queries/index';
 
 interface ICharacterList extends INavigationProps { }
 
@@ -64,6 +65,31 @@ const CharacterList = ({ navigation }: ICharacterList) => {
       name: '',
     },
   });
+  const [searchQuery, setSearchQuery] = React.useState('');
+  const [searchCharacters, { data: searchData }] = useLazyQuery(
+    SEARCH_CHARACTERS,
+    {
+      variables: {
+        name: searchQuery,
+      },
+      fetchPolicy: 'no-cache',
+    },
+  );
+  const [searchResults, setSearchResults] = React.useState([]);
+
+  const handleSearchQuery = React.useCallback(() => {
+    searchCharacters();
+    if (searchData) {
+      setSearchResults(searchData.characters.results);
+    }
+  }, [searchCharacters, searchData]);
+
+  React.useEffect(() => {
+    if (searchQuery === '') {
+      return;
+    }
+    handleSearchQuery();
+  }, [searchQuery]);
 
   const handleItemPress = (id: string) => {
     navigation?.navigate('Details', { id });
@@ -92,9 +118,9 @@ const CharacterList = ({ navigation }: ICharacterList) => {
   return (
     <View style={styles.container}>
       <KeyboardAvoidingView enabled>
-        <Search />
+        <Search onChangeText={(value) => setSearchQuery(value)} />
         <FlatList
-          data={data?.characters.results}
+          data={searchQuery === '' ? data?.characters.results : searchResults}
           renderItem={({ item }) => (
             <Item item={item} handleItemPress={handleItemPress} />
           )}

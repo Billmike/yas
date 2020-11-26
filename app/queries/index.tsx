@@ -33,7 +33,7 @@ export const GET_CHARACTER = gql`
 
 export const SEARCH_CHARACTERS = gql`
   query GetCharacters($name: String!) {
-    characters(filter: {name: $name}) {
+    characters(filter: { name: $name }) {
       results {
         name
         image
