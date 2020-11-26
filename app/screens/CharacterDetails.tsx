@@ -7,9 +7,17 @@ import {
   Image,
   StyleSheet,
   ActivityIndicator,
+  ScrollView,
+  Animated,
 } from 'react-native';
 import { useQuery } from '@apollo/client';
 import { GET_CHARACTER } from '../queries/index';
+import {
+  HEADER_MAX_HEIGHT,
+  CHARACTER_PROFILE_MAX_HEIGHT,
+  HEADER_MIN_HEIGHT,
+  CHARACTER_PROFILE_MIN_HEIGHT,
+} from '../constants/index';
 
 interface ICharacterDetails extends INavigationProps { }
 
@@ -26,12 +34,12 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 14,
+    marginTop: 2,
   },
   row: {
     flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
     marginBottom: 8,
+    alignItems: 'center',
   },
   image: {
     height: 250,
@@ -44,6 +52,27 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     paddingHorizontal: 20,
+  },
+  imageHeader: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+  },
+  imageView: {
+    borderRadius: CHARACTER_PROFILE_MAX_HEIGHT / 2,
+    overflow: 'hidden',
+    borderWidth: 3,
+    borderColor: '#fff',
+    marginTop: HEADER_MAX_HEIGHT - CHARACTER_PROFILE_MAX_HEIGHT / 2,
+  },
+  overlay: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    backgroundColor: 'rgba(1, 34, 36, 1)',
+    width: '100%',
+    height: '100%',
+    opacity: 0.4,
   },
 });
 
@@ -68,34 +97,132 @@ const CharacterDetails = ({ route }: ICharacterDetails) => {
     variables: { id: route?.params.id },
     fetchPolicy: 'cache-first',
   });
+  const [scrollY, setScrollY] = React.useState(new Animated.Value(0));
+  const inputRange = [0, HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT];
+
+  const headerHeight = scrollY.interpolate({
+    inputRange,
+    outputRange: [HEADER_MAX_HEIGHT, HEADER_MIN_HEIGHT],
+    extrapolate: 'clamp',
+  });
+
+  const headerZIndex = scrollY.interpolate({
+    inputRange,
+    outputRange: [0, 1],
+    extrapolate: 'clamp',
+  });
+
+  const profileImageHeight = scrollY.interpolate({
+    inputRange,
+    outputRange: [CHARACTER_PROFILE_MAX_HEIGHT, CHARACTER_PROFILE_MIN_HEIGHT],
+    extrapolate: 'clamp',
+  });
+
+  const profileMarginTop = scrollY.interpolate({
+    inputRange,
+    outputRange: [
+      HEADER_MAX_HEIGHT - CHARACTER_PROFILE_MAX_HEIGHT / 2,
+      HEADER_MAX_HEIGHT,
+    ],
+    extrapolate: 'clamp',
+  });
+
+  const headerTitleBottom = scrollY.interpolate({
+    inputRange: [
+      0,
+      HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT,
+      HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT + 5 + CHARACTER_PROFILE_MIN_HEIGHT,
+      HEADER_MAX_HEIGHT -
+      HEADER_MIN_HEIGHT +
+      5 +
+      CHARACTER_PROFILE_MIN_HEIGHT +
+      25,
+    ],
+    outputRange: [-20, -20, -20, 0],
+    extrapolate: 'clamp',
+  });
 
   return (
     <View style={styles.container}>
+      <Animated.View
+        style={[
+          styles.imageHeader,
+          { height: headerHeight, zIndex: headerZIndex },
+        ]}>
+        <Image
+          source={{ uri: data?.character.image }}
+          style={{ flex: 1, height: undefined, width: undefined }}
+        />
+        <View style={styles.overlay} />
+        <Animated.View
+          style={{
+            position: 'absolute',
+            bottom: headerTitleBottom,
+            left: 0,
+            right: 0,
+          }}>
+          <Text
+            style={{
+              fontSize: 15,
+              fontWeight: 'bold',
+              textAlign: 'center',
+              color: '#fff',
+            }}>
+            {data?.character.name}
+          </Text>
+        </Animated.View>
+      </Animated.View>
       {loading && <ActivityIndicator size="large" style={{ marginTop: 50 }} />}
-      {!loading && (
-        <React.Fragment>
-          <Image source={{ uri: data?.character.image }} style={styles.image} />
-          <View style={styles.row}>
-            <Text style={styles.header}>Name: </Text>
-            <Text style={styles.text}>{data?.character.name}</Text>
-          </View>
-          <View style={styles.row}>
-            <Text style={styles.header}>Gender: </Text>
-            <Text>{data?.character.gender}</Text>
-          </View>
-          <View style={styles.row}>
-            <Text style={styles.header}>Species: </Text>
-            <Text>{data?.character.species}</Text>
-          </View>
-          <Text style={[styles.header, { paddingBottom: 5 }]}>Episodes:</Text>
-          <FlatList
-            data={data?.character.episode}
-            renderItem={({ item }) => <Episodes {...item} />}
-            keyExtractor={(item, index) => `${index}`}
-            contentContainerStyle={{ paddingBottom: 100 }}
+      <ScrollView
+        style={{ flex: 1 }}
+        onScroll={Animated.event([
+          {
+            nativeEvent: {
+              contentOffset: {
+                y: scrollY,
+              },
+            },
+          },
+        ])}
+        scrollEventThrottle={16}>
+        <Animated.View
+          style={[
+            styles.imageView,
+            {
+              height: profileImageHeight,
+              width: profileImageHeight,
+              marginTop: profileMarginTop,
+            },
+          ]}>
+          <Image
+            source={{ uri: data?.character.image }}
+            style={{ flex: 1, height: undefined, width: undefined }}
           />
-        </React.Fragment>
-      )}
+        </Animated.View>
+        <Text
+          style={[
+            styles.text,
+            { fontSize: 25, fontWeight: 'bold', marginBottom: 10 },
+          ]}>
+          {data?.character.name}
+        </Text>
+        <View style={styles.row}>
+          <Text style={styles.header}>Gender: </Text>
+          <Text style={styles.text}>{data?.character.gender}</Text>
+        </View>
+        <View style={styles.row}>
+          <Text style={styles.header}>Specie: </Text>
+          <Text style={styles.text}>{data?.character.species}</Text>
+        </View>
+        <Text style={[styles.header]}>Episodes:</Text>
+        <FlatList
+          data={data?.character.episode}
+          renderItem={({ item }) => <Episodes {...item} />}
+          keyExtractor={(item, index) => `${index}`}
+          contentContainerStyle={{ paddingBottom: 100 }}
+        />
+        <View style={{ height: 1000 }} />
+      </ScrollView>
     </View>
   );
 };

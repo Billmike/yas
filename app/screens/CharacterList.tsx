@@ -34,6 +34,7 @@ const styles = StyleSheet.create({
   image: {
     height: 250,
     width: '100%',
+    overflow: 'hidden',
   },
   list: {
     marginTop: 25,
@@ -42,17 +43,34 @@ const styles = StyleSheet.create({
   name: {
     marginVertical: 15,
     textAlign: 'center',
+    fontSize: 16,
+  },
+  card: {
+    backgroundColor: '#fff',
+    shadowColor: '#D3D3D3',
+    shadowOffset: {
+      width: 2,
+      height: 8,
+    },
+    borderWidth: 1,
+    borderColor: '#DCDCDC',
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    elevation: 4,
+    marginBottom: 10,
+    marginTop: 15,
+    borderRadius: 8,
+    overflow: 'hidden',
+    height: 300,
   },
 });
 
 const Item = ({ item, handleItemPress }: ItemProp) => {
   return (
-    <TouchableOpacity onPress={() => handleItemPress(item?.id)}>
-      <Image
-        source={{ uri: item?.image }}
-        style={styles.image}
-        resizeMode="contain"
-      />
+    <TouchableOpacity
+      style={styles.card}
+      onPress={() => handleItemPress(item?.id)}>
+      <Image source={{ uri: item?.image }} style={styles.image} />
       <Text style={styles.name}>{item?.name}</Text>
     </TouchableOpacity>
   );
