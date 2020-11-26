@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import { useQuery, useLazyQuery } from '@apollo/client';
 import Search from '../components/Search';
+import Error from '../components/ErrorView';
 import { GET_CHARACTERS, SEARCH_CHARACTERS } from '../queries/index';
 
 interface ICharacterList extends INavigationProps { }
@@ -77,22 +78,22 @@ const Item = ({ item, handleItemPress }: ItemProp) => {
 };
 
 const CharacterList = ({ navigation }: ICharacterList) => {
-  const { loading, data, fetchMore } = useQuery(GET_CHARACTERS, {
+  const { loading, data, fetchMore, error } = useQuery(GET_CHARACTERS, {
     fetchPolicy: 'cache-first',
     variables: {
       name: '',
     },
   });
   const [searchQuery, setSearchQuery] = React.useState('');
-  const [searchCharacters, { data: searchData }] = useLazyQuery(
-    SEARCH_CHARACTERS,
-    {
-      variables: {
-        name: searchQuery,
-      },
-      fetchPolicy: 'no-cache',
+  const [
+    searchCharacters,
+    { data: searchData, error: searchError },
+  ] = useLazyQuery(SEARCH_CHARACTERS, {
+    variables: {
+      name: searchQuery,
     },
-  );
+    fetchPolicy: 'no-cache',
+  });
   const [searchResults, setSearchResults] = React.useState([]);
 
   const handleSearchQuery = React.useCallback(() => {
@@ -140,6 +141,9 @@ const CharacterList = ({ navigation }: ICharacterList) => {
           value={searchQuery}
           onChangeText={(value) => setSearchQuery(value)}
         />
+        {(error || searchError) && (
+          <Error text="Error fetching your request. Please try again" />
+        )}
         <FlatList
           data={searchQuery === '' ? data?.characters.results : searchResults}
           renderItem={({ item }) => (

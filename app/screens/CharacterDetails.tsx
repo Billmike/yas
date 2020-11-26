@@ -11,13 +11,14 @@ import {
   Animated,
 } from 'react-native';
 import { useQuery } from '@apollo/client';
-import { GET_CHARACTER } from '../queries/index';
+import { GET_CHARACTER } from '../queries';
+import Error from '../components/ErrorView';
 import {
   HEADER_MAX_HEIGHT,
   CHARACTER_PROFILE_MAX_HEIGHT,
   HEADER_MIN_HEIGHT,
   CHARACTER_PROFILE_MIN_HEIGHT,
-} from '../constants/index';
+} from '../constants';
 
 interface ICharacterDetails extends INavigationProps { }
 
@@ -93,7 +94,7 @@ const Episodes = ({ episode, name, air_date }: EpisodeItem) => {
 };
 
 const CharacterDetails = ({ route }: ICharacterDetails) => {
-  const { loading, data } = useQuery(GET_CHARACTER, {
+  const { loading, data, error } = useQuery(GET_CHARACTER, {
     variables: { id: route?.params.id },
     fetchPolicy: 'cache-first',
   });
@@ -138,7 +139,7 @@ const CharacterDetails = ({ route }: ICharacterDetails) => {
       CHARACTER_PROFILE_MIN_HEIGHT +
       25,
     ],
-    outputRange: [-20, -20, -20, 0],
+    outputRange: [-20, -20, -20, 10],
     extrapolate: 'clamp',
   });
 
@@ -150,7 +151,7 @@ const CharacterDetails = ({ route }: ICharacterDetails) => {
           { height: headerHeight, zIndex: headerZIndex },
         ]}>
         <Image
-          source={{ uri: data?.character.image }}
+          source={{ uri: data?.character.image || '' }}
           style={{ flex: 1, height: undefined, width: undefined }}
         />
         <View style={styles.overlay} />
@@ -172,6 +173,7 @@ const CharacterDetails = ({ route }: ICharacterDetails) => {
           </Text>
         </Animated.View>
       </Animated.View>
+      {error && <Error text="Error fetching your request. Please try again" />}
       {loading && <ActivityIndicator size="large" style={{ marginTop: 50 }} />}
       <ScrollView
         style={{ flex: 1 }}

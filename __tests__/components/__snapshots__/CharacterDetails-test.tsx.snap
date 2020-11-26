@@ -24,7 +24,7 @@ exports[`should render without error 1`] = `
     <Image
       source={
         Object {
-          "uri": undefined,
+          "uri": "",
         }
       }
       style={

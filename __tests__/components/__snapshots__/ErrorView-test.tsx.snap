@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`The Error component renders without error 1`] = `
+<View
+  style={
+    Object {
+      "alignItems": "center",
+      "justifyContent": "center",
+      "marginTop": 20,
+    }
+  }
+>
+  <Text
+    testID="error"
+  >
+    Error
+  </Text>
+</View>
+`;
