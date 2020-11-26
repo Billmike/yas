@@ -118,7 +118,10 @@ const CharacterList = ({ navigation }: ICharacterList) => {
   return (
     <View style={styles.container}>
       <KeyboardAvoidingView enabled>
-        <Search value={searchQuery} onChangeText={(value) => setSearchQuery(value)} />
+        <Search
+          value={searchQuery}
+          onChangeText={(value) => setSearchQuery(value)}
+        />
         <FlatList
           data={searchQuery === '' ? data?.characters.results : searchResults}
           renderItem={({ item }) => (

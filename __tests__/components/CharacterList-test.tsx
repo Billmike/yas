@@ -16,7 +16,13 @@ const mocks = [
       data: {
         characters: {
           info: { next: 2 },
-          results: [{ name: 'Rick', id: '1', image: 'dummyimage' }, { name: 'Rick', id: '1', image: 'dummyimage' }, { name: 'Rick', id: '1', image: 'dummyimage' }, { name: 'Rick', id: '1', image: 'dummyimage' }, { name: 'Rick', id: '1', image: 'dummyimage' }],
+          results: [
+            { name: 'Rick', id: '1', image: 'dummyimage' },
+            { name: 'Rick', id: '1', image: 'dummyimage' },
+            { name: 'Rick', id: '1', image: 'dummyimage' },
+            { name: 'Rick', id: '1', image: 'dummyimage' },
+            { name: 'Rick', id: '1', image: 'dummyimage' },
+          ],
         },
       },
     },

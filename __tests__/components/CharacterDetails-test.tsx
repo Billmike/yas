@@ -9,8 +9,8 @@ const mocks = [
     request: {
       query: GET_CHARACTER,
       variables: {
-        id: '1'
-      }
+        id: '1',
+      },
     },
     result: {
       data: {
@@ -20,19 +20,19 @@ const mocks = [
           species: 'Human',
           image: 'dummyImage',
           episode: [
-            { episode: 'S01E01', name: 'Pilot', air_date: 'Nov 20, 2018' }
-          ]
-        }
-      }
-    }
-  }
+            { episode: 'S01E01', name: 'Pilot', air_date: 'Nov 20, 2018' },
+          ],
+        },
+      },
+    },
+  },
 ];
 
 test('should render without error', () => {
   const { toJSON } = render(
     <MockedProvider mocks={mocks} addTypename={false}>
       <CharacterDetails route={{ params: { id: '1' } }} />
-    </MockedProvider>
+    </MockedProvider>,
   );
-  expect(toJSON()).toMatchSnapshot()
-})
+  expect(toJSON()).toMatchSnapshot();
+});
