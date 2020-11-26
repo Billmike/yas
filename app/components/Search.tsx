@@ -21,11 +21,11 @@ const styles = StyleSheet.create({
   },
 });
 
-const Search = ({ onChangeText }: ISearch) => {
+const Search = ({ onChangeText, value }: ISearch) => {
   return (
     <View style={styles.searchView}>
-      <MaterialIcons name="search" size={25} />
-      <TextInput placeholder="Find a character" style={styles.input} onChangeText={onChangeText} />
+      <MaterialIcons testID="search-icon" name="search" size={25} />
+      <TextInput value={value} testID="search" placeholder="Find a character" style={styles.input} onChangeText={onChangeText} />
     </View>
   );
 };

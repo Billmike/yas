@@ -1,0 +1,113 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should render without error 1`] = `
+<View
+  style={
+    Object {
+      "backgroundColor": "#fff",
+      "flex": 1,
+      "paddingHorizontal": 20,
+    }
+  }
+>
+  <View
+    onLayout={[Function]}
+  >
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "borderColor": "black",
+          "borderRadius": 8,
+          "borderWidth": 1,
+          "flexDirection": "row",
+          "height": 40,
+          "marginTop": 20,
+          "paddingHorizontal": 15,
+        }
+      }
+    >
+      <Text
+        allowFontScaling={false}
+        style={
+          Array [
+            Object {
+              "color": undefined,
+              "fontSize": 25,
+            },
+            undefined,
+            Object {
+              "fontFamily": "Material Icons",
+              "fontStyle": "normal",
+              "fontWeight": "normal",
+            },
+            Object {},
+          ]
+        }
+        testID="search-icon"
+      >
+        
+      </Text>
+      <TextInput
+        allowFontScaling={true}
+        onChangeText={[Function]}
+        placeholder="Find a character"
+        rejectResponderTermination={true}
+        style={
+          Object {
+            "flex": 1,
+            "paddingLeft": 10,
+          }
+        }
+        testID="search"
+        underlineColorAndroid="transparent"
+        value=""
+      />
+    </View>
+    <RCTScrollView
+      ListHeaderComponent={[Function]}
+      contentContainerStyle={
+        Object {
+          "marginTop": 25,
+          "paddingBottom": 100,
+        }
+      }
+      disableVirtualization={false}
+      getItem={[Function]}
+      getItemCount={[Function]}
+      horizontal={false}
+      initialNumToRender={10}
+      keyExtractor={[Function]}
+      maxToRenderPerBatch={10}
+      onContentSizeChange={[Function]}
+      onEndReached={[Function]}
+      onEndReachedThreshold={2}
+      onLayout={[Function]}
+      onMomentumScrollEnd={[Function]}
+      onScroll={[Function]}
+      onScrollBeginDrag={[Function]}
+      onScrollEndDrag={[Function]}
+      removeClippedSubviews={false}
+      renderItem={[Function]}
+      scrollEventThrottle={50}
+      stickyHeaderIndices={Array []}
+      updateCellsBatchingPeriod={50}
+      viewabilityConfigCallbackPairs={Array []}
+      windowSize={21}
+    >
+      <View>
+        <View
+          onLayout={[Function]}
+        >
+          <ActivityIndicator
+            animating={true}
+            color="#999999"
+            hidesWhenStopped={true}
+            size="large"
+          />
+        </View>
+      </View>
+    </RCTScrollView>
+  </View>
+</View>
+`;
